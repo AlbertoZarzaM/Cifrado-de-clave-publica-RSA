@@ -36,9 +36,9 @@ std::string encode(std::string text, int j) {
     //eliminar espacios de text
     text.erase(std::remove_if(text.begin(), text.end(), [](char c) { return std::isspace(c); }), text.end());
     std::string encoded = "";
-    int block_size = j;
-    int num_blocks = ceil((double)text.length() / (double)block_size);
-    int padding = block_size - text.length() % block_size;
+    long int block_size = j;
+    long int num_blocks = ceil((double)text.length() / (double)block_size);
+    long int padding = block_size - text.length() % block_size;
     
     // Add padding X's if necessary
     if (padding != block_size) {
@@ -49,10 +49,10 @@ std::string encode(std::string text, int j) {
     
     // Encode each block of the text
     for (int i = 0; i < num_blocks; i++) {
-        int block_value = 0;
+        long int block_value = 0;
         for (int j = 0; j < block_size; j++) {
             char c = text[i*block_size+j];
-            int char_value = c - 'A';
+            long int char_value = c - 'A';
             block_value += char_value * pow(26, block_size-j-1);
         }
         encoded += std::to_string(block_value) + " ";
@@ -100,23 +100,59 @@ bool isPrimeLehmanPeralta(long long int p) {
     }
 }
 
-int gcdExtended(int a, int b, int &x, int &y) {
+int gcdExtended(int a, int b, long int &x, long int &y) {
     if (b == 0) {
         x = 1;
         y = 0;
         return a;
     }
-    int x1, y1;
-    int gcd = gcdExtended(b, a%b, x1, y1);
+
+    long int x1, y1;
+
+    long int gcd = gcdExtended(b, a%b, x1, y1);
     x = y1;
     y = x1 - (a/b)*y1;
+
+    std::cout << "x: " << x << " y: " << y << std::endl;
+
     return gcd;
 }
 
-bool is_d_coprime(int p, int q, int d) {
-    int phi = (p-1)*(q-1);
-    int x, y;
-    int gcd = gcdExtended(d, phi, x, y);
+long int euclides_extendido(long int a, long int b) {
+  //std::cout << "a: " << a << " b: " << b << std::endl;  
+  std::vector<long int> x = {0,a, b};
+  std::vector<long int> z = {0,1};
+
+  int i = 2;
+  std::cout << std::endl;
+  while (x[i-1] % x[i] != 0) {
+    long int z_aux = 0;
+   // std::cout << "x[i-1] % x[i]: " << x[i-1] % x[i] << std::endl; 
+    x.push_back(x[i-1] % x[i]);
+    // int q = x[i-1] / x[i];
+    long int div = -((x[i-1] / x[i]));
+    z_aux = div * z[i-1] + z[i-2];
+    z_aux = z_aux % a;
+    if (z_aux < 0) {
+      z_aux = z_aux + a;
+    }
+   // std::cout << "z_aux: " << z_aux << std::endl;
+    z.push_back(z_aux);
+    i++;
+  }
+  std::cout << std::endl;
+  if (x[i] == 1) {
+    return z[i-1];
+  } else {
+    std::cout << "No existe inverso" << std::endl;
+    return -1;
+  }
+}
+
+bool is_d_coprime(long int p, long int q, long int d) {
+    long int phi = (p-1)*(q-1);
+    // long int x, y;
+    long int gcd = euclides_extendido(phi, d);
     return (gcd == 1);
 }
 

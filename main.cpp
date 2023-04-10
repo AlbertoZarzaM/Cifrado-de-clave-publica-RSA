@@ -25,7 +25,12 @@ int main() {
     std::cout << std::endl;
 
     long long int n = p * q;
-    long long int phi = (p - 1) * (q - 1);
+    long int phi = (p - 1) * (q - 1);
+
+    std::cout << "p = " << p << std::endl;
+    std::cout << "q = " << q << std::endl;
+    std::cout << "n = " << n << std::endl;
+    std::cout << "phi = " << phi << std::endl;
 
     //• Se comprueba que p y q son primos 
 
@@ -33,30 +38,25 @@ int main() {
         std::cout << "p y q son primos" << std::endl;
     } else {
         std::cout << "p y q no son primos" << std::endl;
-        exit(0);
     }
 
     //Se comprueba que d es primo con phi(n)
 
-    if (is_d_coprime(p, q, d)) {
-        std::cout << "d es primo con phi(n)" << std::endl;
-    } else {
-        std::cout << "d no es primo con phi(n)" << std::endl;
-        exit(0);
-    }
 
     //• Se calcula e
     // e = inverso de d módulo φ(n)
-    int e;
-    int x, y;
-    int gcd = gcdExtended(d, phi, x, y);
-    if (x < 0) {
-        e = phi + x;
-    } else {
-        e = x;
-    }
+    //int e;
+    long int x, y;
+   // std::cout << "phi1: " << phi << " d1: " << d << std::endl;
+    long int gcd = euclides_extendido(phi, d);
 
-    std::cout << "e = " << e << std::endl;
+    if (gcd != -1) {
+        std::cout << "d es primo con phi(n)" << std::endl;
+    } else {
+        std::cout << "d no es primo con phi(n)" << std::endl;
+    }
+    
+    std::cout << "e = " << gcd << std::endl;
 
     //Se busca el valor de j 26^j-1<n<26^j
 
@@ -74,7 +74,7 @@ int main() {
     std::vector<long long int> encoded_text_vector = splitString(encoded_text);
 
     for (int i = 0; i < encoded_text_vector.size(); i++) {
-        std::cout << encrypt(encoded_text_vector.at(i), e, n)<< " ";
+        std::cout << encrypt(encoded_text_vector.at(i), gcd, n)<< " ";
     }
 
     std::cout << std::endl;
