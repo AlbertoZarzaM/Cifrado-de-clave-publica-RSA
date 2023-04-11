@@ -40,7 +40,6 @@ int main() {
         std::cout << "p y q no son primos" << std::endl;
     }
 
-    //Se comprueba que d es primo con phi(n)
 
 
     //• Se calcula e
@@ -50,6 +49,7 @@ int main() {
    // std::cout << "phi1: " << phi << " d1: " << d << std::endl;
     long int gcd = euclides_extendido(phi, d);
 
+    //Se comprueba que d es primo con phi(n)
     if (gcd != -1) {
         std::cout << "d es primo con phi(n)" << std::endl;
     } else {
